@@ -1,4 +1,15 @@
-*{
- padding: 0px;
- margin: 0px
+#game{
+    padding: 0px;
+    border: 1px solid;
+    
+    margin: 0px auto;
+}
+.keys{
+    width: 200px;
+    float: left;
+}
+#container{
+    text-align: center;
+    width: 1024px;
+    margin: 0px auto; 
 }

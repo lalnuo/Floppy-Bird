@@ -10,8 +10,8 @@ var gravity = 0;
 var towers = [];
 var grounds = [];
 var ground;
-$(document).ready(function(){
 
+$(document).ready(function(){
     $(window).keypress(function(e){      
  
         if(e.charCode == 32 || e.keyCode == 38){
@@ -22,6 +22,18 @@ $(document).ready(function(){
         }
     });
     
+});
+
+document.addEventListener('touchstart', function(e){
+    e.preventDefault();
+    jump();
+});
+
+$("#game").swipe({
+    swipe:function(event, direction, distance, duration, fingerCount){
+        restart();
+    },
+    threshold:100
 });
 
 function jump(){
@@ -151,7 +163,7 @@ function moveTowers(){
     var passedTowers = [];
     var i = 0; // counter to check if tower is up or down
     towers.forEach(function(tower){
-        context.fillStyle ="rgb("+(tower.x-100)+",255,60)";
+        context.fillStyle ="rgb("+(Math.round(tower.x/3))+",255,60)";
         tower.x-=3;
         if (i % 2 == 0){
             context.fillRect(tower.x,mapHeight-tower.y-32,100,tower.y);

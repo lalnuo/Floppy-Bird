@@ -1,14 +1,27 @@
 <html lang="en">
-<head>
-  
-  <meta charset="utf-8">
-  <link rel="stylesheet" type="text/css" href="style.css"/>
-  <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-  <title>Floppy Bird by pro</title>
-</head>
+    <head> 
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="style.css"/>
+        <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="touchSwipe.js"></script>
+        <title>Floppy Bird by pro</title>
+    </head>
 
-<body>
-    <canvas id="game"></canvas> 
-  <script src="code.js"></script> 
-</body>
+    <body>
+        <div id ="container">
+            <canvas id="game"></canvas>
+            <br/>
+            <div class="keys">
+                <b>On computer:</b><br/>
+                <p>Jump: Space</p>
+                <p>Restart: Enter</p>
+            </div>
+            <div class="keys">
+                <b>On ipad/android/etc.</b>
+                <p>Jump: Click</p>
+                <p>Restart: Swipe</p>
+             </div>
+        </div>    
+        <script src="code.js"></script> 
+    </body>
 </html>
