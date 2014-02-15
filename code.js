@@ -37,7 +37,7 @@ $("#game").swipe({
 });
 
 function jump(){
-    gravity = -10;
+    gravity = -14;
 }
 
 function restart(){
@@ -108,7 +108,7 @@ function generateGround(){
 //this method moves tiles by 3 pixels, if tile gets out of the screen it will be returned back to right side
 function moveGround(){
     for(var i = 0; i < groundTiles.length; i++){
-        groundTiles[i] = (groundTiles[i] < -32) ? groundTiles[i] = mapWidth-2 : groundTiles[i]-=3;
+        groundTiles[i] = (groundTiles[i] < -32) ? groundTiles[i] = mapWidth-2 : groundTiles[i]-=4;
     }
 }
 
@@ -151,7 +151,7 @@ function moveTowers(){
     var i = 0; // counter to check if tower is up or down
     towers.forEach(function(tower){
         context.fillStyle ="rgb("+(Math.round(tower.x/3))+",255,60)";
-        tower.x-=3;
+        tower.x-=4;
         if (i % 2 == 0){ 
             context.fillRect(tower.x,mapHeight-tower.y-32,100,tower.y); //-32 so it doesn't draw on the grass
         }else{
@@ -200,7 +200,7 @@ function game() {
             if(framesGone % 120 == 0){ 
                 generateTowerPair();
             }
-            gravity+=0.8;
+            gravity+=0.6;
             player.y+=gravity
             context.fillStyle = "#FFFFFF";
             context.fillRect(0,0,window.innerWidth,mapHeight-32); 
