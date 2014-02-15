@@ -8,7 +8,7 @@ var mapWidth = 1024;
 var mapHeight = 768;
 var gravity = 0;
 var towers = [];
-var grounds = [];
+var groundTiles = [];
 var ground;
 
 $(document).ready(function(){
@@ -41,7 +41,8 @@ function jump(){
 }
 
 function restart(){
-    framesGone = 120; 
+    framesGone = 120;
+    score = 0;
     isGameOver = false;
     player.y = window.innerHeight/2;
     towers = [];
@@ -59,6 +60,7 @@ function Tower(y,up){
     this.x = mapWidth;
     this.y = y; 
     this.width = 100;
+    this.scored = false;
     this.up = up;
     this.checkCollision = function(player){
         //check if player is between towers x
@@ -96,55 +98,42 @@ function generateGround(){
     ground = new Image()
     ground.onload = function(){
         for(var i = mapWidth+32; i>0; i-=32){
-            grounds.push(i);
-            
+            groundTiles.push(i);
         }
     }
     ground.src = 'grass_32x32.png';
 }
 
 
+//this method moves tiles by 3 pixels, if tile gets out of the screen it will be returned back to right side
 function moveGround(){
-    for(var i = 0; i < grounds.length; i++){
-        var currentPos = grounds[i];
-        if(currentPos < -32){
-            currentPos = mapWidth-2;
-        }else{
-            currentPos-=3;
-        }
-        grounds[i] = currentPos;
+    for(var i = 0; i < groundTiles.length; i++){
+        groundTiles[i] = (groundTiles[i] < -32) ? groundTiles[i] = mapWidth-2 : groundTiles[i]-=3;
     }
 }
+
 function drawGround(){
     moveGround();
-    grounds.forEach(function(i){
-        i++;
+    groundTiles.forEach(function(i){ 
         context.drawImage(ground,i,mapHeight-32);
     });
-    
 }
 
 function checkPlayer(){
-
-
-    //checking player doesn't hit the ground
+    //checks player doesn't hit the ground
     if(player.y > mapHeight-62){
-       
        gameOver();
     }
-    
-    //checking player doesn't hit towers
+    //checks player doesn't hit towers
     towers.forEach(function(tower){
         tower.checkCollision(player);
-
-    });
-    
+    }); 
 }
 
 function gameOver(){ 
         context.fillStyle = "red";
         context.font = "bold 15px Arial";
-        context.fillText("Game Over | Press enter to replay | Score: "+scoreText,mapWidth/2,mapHeight/2);
+        context.fillText("Game Over | Score: "+score,mapWidth/2-80,mapHeight/2); 
         isGameOver = true;
         player.y = 100;
 }
@@ -152,9 +141,7 @@ function gameOver(){
 
 function generateTowerPair(){ 
     var tower1Height = Math.floor(Math.random()*(mapHeight*0.6))+(mapHeight*0.2);
-    console.log(tower1Height);
     var tower2Height = mapHeight-tower1Height-(mapHeight*0.225); // 0.1875 = 18% gap between towers
-    console.log(tower1Height+tower2Height);
     towers.push(new Tower(tower1Height,false)); 
     towers.push(new Tower(tower2Height,true)); 
 }
@@ -165,13 +152,14 @@ function moveTowers(){
     towers.forEach(function(tower){
         context.fillStyle ="rgb("+(Math.round(tower.x/3))+",255,60)";
         tower.x-=3;
-        if (i % 2 == 0){
-            context.fillRect(tower.x,mapHeight-tower.y-32,100,tower.y);
+        if (i % 2 == 0){ 
+            context.fillRect(tower.x,mapHeight-tower.y-32,100,tower.y); //-32 so it doesn't draw on the grass
         }else{
             context.fillRect(tower.x,0,100,tower.y);
         }
 
-        if(tower.x <= -100){
+        if(tower.x <= -100){ // checking if we have already passed the tower
+            score+=0.5; // 0.5 because always 2 towers passed at the same time
             passedTowers.push(tower);
         }
         i++;
@@ -183,22 +171,20 @@ function moveTowers(){
 function removePassedTowers(passedTowers){
     passedTowers.forEach(function(i){
         var index = towers.indexOf(i);
-        towers.splice(i,1);
+        towers.splice(index,1);
     });
 }
 
 
-var beginningTime = new Date() / 1000;
-var scoreText;
+
 function writeScore(){
     if(!isGameOver){
-        scoreText = Math.round(new Date()/1000-beginningTime);
         context.font= "40px Arial";
-        context.fillText(scoreText,35,35); 
-        return scoreText;
+        context.fillText(score,35,35); 
+        return score;
     }
 }
-
+var score = 0;
 var fps = 100;
 var now;
 var then = Date.now();
@@ -211,7 +197,7 @@ function game() {
     delta = now - then;
     if(delta > interval){
     if(!isGameOver){
-            if(framesGone % 120 == 0){
+            if(framesGone % 120 == 0){ 
                 generateTowerPair();
             }
             gravity+=0.8;
@@ -228,6 +214,5 @@ function game() {
     framesGone++;
     then = now - (delta%interval);
 }
-
 setup();
-game()
+game();
