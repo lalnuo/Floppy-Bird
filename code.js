@@ -37,7 +37,7 @@ $("#game").swipe({
 });
 
 function jump(){
-    gravity = -14;
+    gravity = -11;
 }
 
 function restart(){
