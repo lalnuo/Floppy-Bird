@@ -10,6 +10,7 @@ var gravity = 0;
 var towers = [];
 var groundTiles = [];
 var ground;
+var floppy; 
 
 $(document).ready(function(){
     $(window).keypress(function(e){      
@@ -82,7 +83,7 @@ function Tower(y,up){
 
 function drawPlayer(){
     context.fillStyle = "#00FF00";
-    context.fillRect(player.x, player.y, 25,25);
+    context.drawImage(floppy,player.x,player.y);
 }
 
 var setup = function(){
@@ -92,6 +93,8 @@ var setup = function(){
     canvas.height = mapHeight;
     player = new Player();
     generateGround();
+    floppy = new Image();
+    floppy.src = 'floppy.png';
 }
 
 function generateGround(){
